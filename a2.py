@@ -1,5 +1,6 @@
 import argparse
 import random
+import re
 from sklearn.datasets import fetch_20newsgroups
 from sklearn.base import is_classifier
 import numpy as np
@@ -19,6 +20,21 @@ def part1(samples):
 
 def extract_features(samples):
     print("Extracting features ...")
+
+    total_words = []
+    for line in samples:
+        words = line.split()
+        for word in words:
+            word = word.lower()
+            word = re.sub(r'[^\w\s]','',word)
+            total_words.append(word)
+    
+    # print(len(total_words))
+    unique_set = set(total_words)
+    unique_word_list = list(unique_set)
+    print(unique_word_list)
+    # print(len(unique_word_list))
+            
     pass #Fill this in
 
 
@@ -102,10 +118,10 @@ def evalute_classifier(clf, X, y):
 def load_data():
     print("------------Loading Data-----------")
     data = fetch_20newsgroups(subset='all', shuffle=True, random_state=42)
-    print("Example data sample:\n\n", data.data[0])
-    print("Example label id: ", data.target[0])
-    print("Example label name: ", data.target_names[data.target[0]])
-    print("Number of possible labels: ", len(data.target_names))
+    # print("Example data sample:\n\n", data.data[0])
+    # print("Example label id: ", data.target[0])
+    # print("Example label name: ", data.target_names[data.target[0]])
+    # print("Number of possible labels: ", len(data.target_names))
     return data.data, data.target, data.target_names
 
 
