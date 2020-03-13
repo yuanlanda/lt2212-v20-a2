@@ -1,6 +1,6 @@
 import argparse
 import random
-import re
+import string
 from sklearn.datasets import fetch_20newsgroups
 from sklearn.base import is_classifier
 import numpy as np
@@ -21,20 +21,39 @@ def part1(samples):
 def extract_features(samples):
     print("Extracting features ...")
 
-    total_words = []
-    for line in samples:
-        words = line.split()
+    samples_words_list = []
+    words_index_dict = {}
+    for sample in samples:
+        words_tmp = sample.lower().split()
+
+        # filter numbers and punctuation
+        words = [word for word in words_tmp if word.isalpha()]
+
+        samples_words_list.append(words)
+
+        i = 0
         for word in words:
-            word = word.lower()
-            word = re.sub(r'[^\w\s]','',word)
-            total_words.append(word)
+            if word not in words_index_dict:
+                words_index_dict[word] = i
+                i += 1
     
-    # print(len(total_words))
-    unique_set = set(total_words)
-    unique_word_list = list(unique_set)
-    print(unique_word_list)
-    # print(len(unique_word_list))
-            
+    unique_word_list = tuple(words_index_dict.keys())
+
+    # create feature list
+    features = np.zeros((len(samples), len(unique_word_list)))
+
+    sample_index = 0  
+    for sample_words in samples_words_list:
+        sample_list = np.zeros(len(unique_word_list))
+
+        sample_words_dict = {}
+        for sample_word in sample_words:
+            index = words_index_dict[sample_word]
+            sample_list[index] += 1
+
+        features[sample_index] = sample_list
+        sample_index += 1
+
     pass #Fill this in
 
 
