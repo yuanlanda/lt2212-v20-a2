@@ -27,6 +27,7 @@ def extract_features(samples):
     print("Extracting features ...")
 
     samples_words_list = []
+    words_index_dict_tmp = {}
     words_index_dict = {}
     for sample in samples:
         words_tmp = sample.lower().split()
@@ -36,28 +37,36 @@ def extract_features(samples):
 
         samples_words_list.append(words)
 
+        # create unique word index dict
         i = 0
         for word in words:
-            if word not in words_index_dict:
-                words_index_dict[word] = i
+            if word not in words_index_dict_tmp:
+                words_index_dict_tmp[word] = i
                 i += 1
+
+    # filter the word occurs less than 5 counts in the whole corpus
+    # The ndarray columns is sorted by the keys of this dict
+    for key in words_index_dict_tmp.keys():
+        if words_index_dict_tmp[key] > 4:
+            words_index_dict[key] = words_index_dict_tmp[key]
     
     unique_word_list = tuple(words_index_dict.keys())
 
-    # create feature list
+    # create feature ndarray, rows represent samples, columns represent words
     features = np.zeros((len(samples), len(unique_word_list)))
 
     sample_index = 0  
     for sample_words in samples_words_list:
         sample_list = np.zeros(len(unique_word_list))
 
-        sample_words_dict = {}
         for sample_word in sample_words:
-            index = words_index_dict[sample_word]
-            sample_list[index] += 1
+            if sample_word in words_index_dict.keys():
+                index = words_index_dict[sample_word]
+                sample_list[index] += 1
 
         features[sample_index] = sample_list
         sample_index += 1
+    
     return features
 
 
