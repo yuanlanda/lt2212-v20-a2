@@ -4,6 +4,10 @@ import string
 from sklearn.datasets import fetch_20newsgroups
 from sklearn.base import is_classifier
 from sklearn.decomposition import PCA
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import precision_score,accuracy_score,recall_score,f1_score
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.neighbors import KNeighborsClassifier
 import numpy as np
 random.seed(42)
 
@@ -79,9 +83,9 @@ def reduce_dim(X,n=10):
 #DONT CHANGE THIS FUNCTION EXCEPT WHERE INSTRUCTED
 def get_classifier(clf_id):
     if clf_id == 1:
-        clf = "" # <--- REPLACE THIS WITH A SKLEARN MODEL
+        clf = KNeighborsClassifier(n_neighbors=5)
     elif clf_id == 2:
-        clf = "" # <--- REPLACE THIS WITH A SKLEARN MODEL
+        clf = DecisionTreeClassifier()
     else:
         raise KeyError("No clf with id {}".format(clf_id))
 
@@ -117,28 +121,31 @@ def part3(X, y, clf_id):
 
 
 def shuffle_split(X,y):
-    pass # Fill in this
+    return train_test_split(X, y, test_size=0.2)
 
 
 def train_classifer(clf, X, y):
     assert is_classifier(clf)
-    ## fill in this
+    clf.fit(X, y)
 
 
 def evalute_classifier(clf, X, y):
     assert is_classifier(clf)
-    #Fill this in
-
+    y_pred = clf.predict(X)
+    print("Accuracy:", accuracy_score(y, y_pred))
+    print("Precision:", precision_score(y, y_pred, average='weighted'))
+    print("Recall:", recall_score(y, y_pred, average='weighted'))
+    print("F-measure:", f1_score(y, y_pred,average='weighted'))
 
 ######
 #DONT CHANGE THIS FUNCTION
 def load_data():
     print("------------Loading Data-----------")
     data = fetch_20newsgroups(subset='all', shuffle=True, random_state=42)
-    # print("Example data sample:\n\n", data.data[0])
-    # print("Example label id: ", data.target[0])
-    # print("Example label name: ", data.target_names[data.target[0]])
-    # print("Number of possible labels: ", len(data.target_names))
+    print("Example data sample:\n\n", data.data[0])
+    print("Example label id: ", data.target[0])
+    print("Example label name: ", data.target_names[data.target[0]])
+    print("Number of possible labels: ", len(data.target_names))
     return data.data, data.target, data.target_names
 
 
