@@ -14,5 +14,22 @@ I use PCA class in [scikit-learn](https://scikit-learn.org/stable/modules/classe
 
 ## Part 3
 
+`model_id #1`: GaussianNB
+
+`model_id #2` : DecisionTreeClassifier
+
+
+
+| Scores 	| GaussianNB 	| DecisionTreeClassifier 	|
+|-----------	|:----------:	|:----------------------:	|
+| Accuracy 	| 0.15889 	| 0.18594 	|
+| Precision 	| 0.26179 	| 0.18656 	|
+| Recall 	| 0.15889 	| 0.18594 	|
+| F-measure 	| 0.14363 	| 0.18549 	|
+
+
+
+## Part 4
+
 
 
