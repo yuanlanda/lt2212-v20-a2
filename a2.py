@@ -3,6 +3,7 @@ import random
 import string
 from sklearn.datasets import fetch_20newsgroups
 from sklearn.base import is_classifier
+from sklearn.decomposition import PCA
 import numpy as np
 random.seed(42)
 
@@ -53,9 +54,7 @@ def extract_features(samples):
 
         features[sample_index] = sample_list
         sample_index += 1
-
-    pass #Fill this in
-
+    return features
 
 
 ##### PART 2
@@ -72,9 +71,8 @@ def part2(X, n_dim):
 
 
 def reduce_dim(X,n=10):
-    #fill this in
-    pass
-
+    pca = PCA(n_components=n)
+    return pca.fit_transform(X)
 
 
 ##### PART 3
