@@ -4,10 +4,11 @@ import string
 from sklearn.datasets import fetch_20newsgroups
 from sklearn.base import is_classifier
 from sklearn.decomposition import PCA
+from sklearn.decomposition import TruncatedSVD
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import precision_score,accuracy_score,recall_score,f1_score
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.neighbors import KNeighborsClassifier
+from sklearn.naive_bayes import GaussianNB
 import numpy as np
 random.seed(42)
 
@@ -44,11 +45,13 @@ def extract_features(samples):
                 words_index_dict_tmp[word] = i
                 i += 1
 
-    # filter the word occurs less than 5 counts in the whole corpus
+    # Filter the word occurs less than 5 counts in the whole corpus
     # The ndarray columns is sorted by the keys of this dict
+    j = 0
     for key in words_index_dict_tmp.keys():
-        if words_index_dict_tmp[key] > 4:
-            words_index_dict[key] = words_index_dict_tmp[key]
+        if words_index_dict_tmp[key] > 5:
+            words_index_dict[key] = j
+            j += 1
     
     unique_word_list = tuple(words_index_dict.keys())
 
@@ -84,15 +87,15 @@ def part2(X, n_dim):
 
 
 def reduce_dim(X,n=10):
-    pca = PCA(n_components=n)
-    return pca.fit_transform(X)
+    svd = TruncatedSVD(n_components=n)
+    return svd.fit_transform(X)
 
 
 ##### PART 3
 #DONT CHANGE THIS FUNCTION EXCEPT WHERE INSTRUCTED
 def get_classifier(clf_id):
     if clf_id == 1:
-        clf = KNeighborsClassifier(n_neighbors=5)
+        clf = GaussianNB()
     elif clf_id == 2:
         clf = DecisionTreeClassifier()
     else:
