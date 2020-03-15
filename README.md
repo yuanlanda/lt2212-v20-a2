@@ -36,6 +36,3 @@ In general, `GaussianNB` has a better performance compared to `DecisionTreeClass
 
 
 
-
-
-
